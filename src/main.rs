@@ -6,6 +6,7 @@ use structopt::StructOpt;
 
 const TOGGL_API: &str = "https://www.toggl.com/api/v8";
 
+#[allow(dead_code)]
 fn toggl_api_me() -> String {
     format!("{}/me", TOGGL_API)
 }
@@ -15,9 +16,10 @@ fn toggl_api_time_entries() -> String {
 }
 
 fn read_api_token() -> String {
-    fs::read_to_string("api_token").expect("Reading API token from 'api_token' failed")
+    fs::read_to_string("api_token").expect("Reading API token from 'api_token' failed").trim()
 }
 
+#[allow(dead_code)]
 fn get_user_profile(api_token: String) -> Result<TogglProfile, Error> {
     let client = reqwest::Client::new();
     let new_profile: TogglProfile = client
@@ -30,19 +32,27 @@ fn get_user_profile(api_token: String) -> Result<TogglProfile, Error> {
 
 fn add_time_entry(api_token: String, time_entry: TimeEntryRequest) {
     let client = reqwest::Client::new();
-    let response = client
+    let mut response = client
         .post(&toggl_api_time_entries())
         .basic_auth(api_token, Some("api_token"))
         .json(&time_entry)
-        .send();
-    println!("{}", response.unwrap().text().unwrap());
+        .send().unwrap();
+    let status = response.status();
+    // println!("{:?}", response);
+    // println!("{}", response.text().unwrap());
+    if status != 200 {
+        println!("{}", status);
+        panic!("Aborting, status wasn't 200!");
+    }
 }
 
 fn main() -> Result<(), Box<std::error::Error>> {
     let opt = Opt::from_args();
-
+    // println!("{:?}", opt);
     let api_token = read_api_token();
+    // println!("{:?}", api_token);
     let time_entry = opt_to_time_entry(opt);
+    // println!("{:?}", time_entry);
     add_time_entry(api_token, time_entry);
 
     // let user_profile = get_user_profile(api_token)?;
@@ -99,12 +109,12 @@ fn opt_to_time_entry(opt: Opt) -> TimeEntryRequest {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 struct TimeEntryRequest {
     time_entry: TimeEntry,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 struct TimeEntry {
     description: String,
     created_with: String,
