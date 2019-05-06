@@ -16,7 +16,7 @@ fn toggl_api_time_entries() -> String {
 }
 
 fn read_api_token() -> String {
-    fs::read_to_string("api_token").expect("Reading API token from 'api_token' failed").trim()
+    fs::read_to_string("api_token").expect("Reading API token from 'api_token' failed").trim().to_string()
 }
 
 #[allow(dead_code)]
