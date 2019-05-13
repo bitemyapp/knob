@@ -5,11 +5,11 @@ cargo = $(env) cargo
 debug-env = RUST_BACKTRACE=1 RUST_LOG=$(package)=debug
 debug-cargo = $(env) $(debug-env) cargo
 
-build:
-	$(cargo) build
-
 build-release:
 	$(cargo) build --release
+
+build:
+	$(cargo) build
 
 clippy:
 	$(cargo) clippy
