@@ -32,7 +32,7 @@ fn get_user_profile(api_token: String) -> Result<TogglProfile, Error> {
 
 fn add_time_entry(api_token: String, time_entry: TimeEntryRequest) {
     let client = reqwest::Client::new();
-    let response = client
+    let mut response = client
         .post(&toggl_api_time_entries())
         .basic_auth(api_token, Some("api_token"))
         .json(&time_entry)
@@ -41,6 +41,7 @@ fn add_time_entry(api_token: String, time_entry: TimeEntryRequest) {
     // println!("{:?}", response);
     // println!("{}", response.text().unwrap());
     if status != 200 {
+        println!("{}", response.text().expect("Couldn't get response text"));
         println!("{}", status);
         panic!("Aborting, status wasn't 200!");
     }
