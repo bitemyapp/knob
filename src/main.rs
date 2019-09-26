@@ -16,7 +16,10 @@ fn toggl_api_time_entries() -> String {
 }
 
 fn read_api_token() -> String {
-    fs::read_to_string("api_token").expect("Reading API token from 'api_token' failed").trim().to_string()
+    fs::read_to_string("api_token")
+        .expect("Reading API token from 'api_token' failed")
+        .trim()
+        .to_string()
 }
 
 #[allow(dead_code)]
@@ -36,7 +39,8 @@ fn add_time_entry(api_token: String, time_entry: TimeEntryRequest) {
         .post(&toggl_api_time_entries())
         .basic_auth(api_token, Some("api_token"))
         .json(&time_entry)
-        .send().unwrap();
+        .send()
+        .unwrap();
     let status = response.status();
     // println!("{:?}", response);
     // println!("{}", response.text().unwrap());
