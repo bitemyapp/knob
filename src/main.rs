@@ -51,7 +51,7 @@ fn add_time_entry(api_token: String, time_entry: TimeEntryRequest) {
     }
 }
 
-fn main() -> Result<(), Box<std::error::Error>> {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let opt = Opt::from_args();
     // println!("{:?}", opt);
     let api_token = read_api_token();
