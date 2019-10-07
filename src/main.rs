@@ -34,6 +34,7 @@ fn get_user_profile(api_token: String) -> Result<TogglProfile, Error> {
 }
 
 fn add_time_entry(api_token: String, time_entry: TimeEntryRequest) {
+    // println!("CONSTRUCTING REQUEST: ");
     let client = reqwest::Client::new();
     let mut response = client
         .post(&toggl_api_time_entries())
@@ -42,6 +43,7 @@ fn add_time_entry(api_token: String, time_entry: TimeEntryRequest) {
         .send()
         .unwrap();
     let status = response.status();
+    // println!("RESPONSE: ");
     // println!("{:?}", response);
     // println!("{}", response.text().unwrap());
     if status != 200 {
@@ -108,6 +110,7 @@ fn opt_to_time_entry(opt: Opt) -> TimeEntryRequest {
         pid: opt.project,
         start: opt.start,
         duration: duration_seconds,
+        billable: true,
     };
     TimeEntryRequest {
         time_entry: time_entry,
@@ -127,6 +130,7 @@ struct TimeEntry {
     duration: u32,
     wid: u32,
     pid: u32,
+    billable: bool,
 }
 
 #[derive(Serialize, Debug, Deserialize)]

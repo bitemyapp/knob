@@ -16,3 +16,6 @@ api_token
 # Intellij
 .idea/
 *.iml
+
+# exe
+./knob

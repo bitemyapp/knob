@@ -18,7 +18,8 @@ run: build
 	./target/debug/$(package)
 
 install:
-	$(cargo) install --force
+	$(cargo) build --release
+	cp ~/.cargo/cache/release/knob .
 
 test:
 	$(cargo) test
